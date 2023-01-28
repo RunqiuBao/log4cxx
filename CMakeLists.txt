@@ -86,7 +86,16 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Building
 add_subdirectory(src)
 
+# prepare installing folder
+SET(CMAKE_INSTALL_PREFIX "option_value" CACHE STRING "User-specified install path")
+# set(CMAKE_INSTALL_PREFIX "/home/runqiu/code/event_camera_repo/tools/tool_detectobjects/3rdparty/logging-log4cxx/install/")
+install(DIRECTORY DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
+install(DIRECTORY DESTINATION "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
+
 ## Installing
+# Note(Bao): if CMAKE_INSTALL_LIBDIR or CMAKE_INSTALL_INCLUDEDIR is a relative path, it will be prefixed with CMAKE_INSTALL_PREFIX
 include(GNUInstallDirs)
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/src/main/include/log4cxx
   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
@@ -127,6 +136,7 @@ IF(WIN32 AND BUILD_SHARED_LIBS AND LOG4CXX_INSTALL_PDB)
 ENDIF()
 
 if(UNIX)
+  message("is UNIX")
   # Support for pkg-config in consuming projects
   set(prefix "${CMAKE_INSTALL_PREFIX}")
   set(exec_prefix "${CMAKE_INSTALL_PREFIX}")
@@ -243,6 +253,8 @@ endif()
 if( "${SHARED_MUTEX_IMPL}" STREQUAL "NONE" )
     message( FATAL_ERROR "No shared_mutex implementation found.  Requires Boost or C++17" )
 endif()
+
+message("CMAKE_INSTALL_LIBDIR: ${CMAKE_INSTALL_LIBDIR}, CMAKE_INSTALL_BINDIR: ${CMAKE_INSTALL_BINDIR}, CMAKE_INSTALL_INCLUDEDIR: ${CMAKE_INSTALL_INCLUDEDIR}, CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
 
 #
 # Output configuration information
